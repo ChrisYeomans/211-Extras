@@ -1,2 +1,2 @@
 # 211-Extras
-Extra tasks give is CS211
+Extra tasks given in CS211
