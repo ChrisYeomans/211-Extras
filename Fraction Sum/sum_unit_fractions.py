@@ -3,10 +3,10 @@ from fractions import Fraction as f
 import sys, math
 
 def main():
-	o_sl = [f(1, 2), f(1, 3), f(1, 6)]
+	o_sl = [f(1, 1)]
 	o_bl = reset_bl(o_sl)
 	n_sl = []
-	f_sl = o_sl[:]
+	end = False
 	s_sl = o_sl[:]
 	while True:
 		while True:
@@ -24,13 +24,16 @@ def main():
 			print(n_sl, sum(n_sl), len(n_sl), "pb",'\n')
 			#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
 			if o_sl == n_sl:
-				f_sl = o_sl[:]
 				break
-			if len(set(o_sl)) == len(o_sl):
+			if len(set(n_sl)) != len(n_sl):
+				sys.stderr.write("duplicates pb\n")
+				end = True
 				break
 			o_sl = n_sl[:]
-			o_bl = reset_bl(o_sl)
+			o_bl = reset_bl(n_sl)
 			if sum(n_sl) != 1:
+				sys.stderr.write("non sum one pb\n")
+				end = True
 				break
 
 		while True:
@@ -47,13 +50,16 @@ def main():
 					n_sl = n_sl + [o_sl[i]]
 			print(n_sl, sum(n_sl), len(n_sl), "bl",'\n')
 			if o_sl == n_sl:
-				s_sl = o_sl[:]
-				break
-			if len(set(o_sl)) == len(o_sl):
 				break
 			o_sl = n_sl[:]
-			o_bl = reset_bl(o_sl)
+			if len(set(n_sl)) != len(n_sl):
+				sys.stderr.write("duplicates bl\n")
+				end = True
+				break
+			o_bl = reset_bl(n_sl)
 			if sum(n_sl) != 1:
+				sys.stderr.write("no sum one bl\n")
+				end = True
 				break
 		
 		while True:
@@ -68,21 +74,23 @@ def main():
 					for j in tmp:
 						o_bl[j.denominator] = True
 				else:
-					n_sl = n_sl + [o_sl[i]]
+					n_sl += [o_sl[i]]
 			print(n_sl, sum(n_sl), len(n_sl), "fb",'\n')
 			#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
-			if o_sl == n_sl:
-				f_sl = o_sl[:]
+			if len(set(n_sl)) != len(n_sl):
+				sys.stderr.write("duplicates fb\n")
+				end = True
 				break
-			if len(set(o_sl)) == len(o_sl):
+			if o_sl == n_sl:
 				break
 			o_sl = n_sl[:]
 			o_bl = reset_bl(o_sl)
 			if sum(n_sl) != 1:
+				sys.stderr.write("non sum one fb\n")
+				end = True
 				break
 
 		while True:
-			o_sl = n_sl[:]
 			sys.stderr.write("three break\n")
 			n_sl = []
 			for i in range(len(o_sl)):
@@ -100,14 +108,19 @@ def main():
 			if o_sl == n_sl:
 				f_sl = o_sl[:]
 				break
-			if len(set(o_sl)) == len(o_sl):
+			if len(set(o_sl)) != len(o_sl):
+				end = True
+				sys.stderr.write("duplicates tb\n")
 				break
 			o_bl = reset_bl(o_sl)
 			if sum(n_sl) != 1:
+				end = True
+				sys.stderr.write("no sum one tb\n")
 				break
+			o_sl = n_sl[:]
 		if sum(n_sl) != 1:
 			break
-		if len(set(o_sl)) != len(o_sl):
+		if end:
 			break
 
 def break_lower(fr, bl):
