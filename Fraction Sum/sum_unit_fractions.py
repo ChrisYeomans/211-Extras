@@ -35,6 +35,8 @@ def main():
 				sys.stderr.write("non sum one pb\n")
 				end = True
 				break
+		if end:
+			break
 
 		while True:
 			sys.stderr.write("break lower\n")
@@ -61,18 +63,27 @@ def main():
 				sys.stderr.write("no sum one bl\n")
 				end = True
 				break
+		if end:
+			break
 		
 		while True:
 			sys.stderr.write("factor break\n")
 			n_sl = []
 			for i in range(len(o_sl)):
+				escape_fb = False
 				tmp = f_break(o_sl[i].denominator, o_bl)
 				#sys.stderr.write(str(tmp)+" "+str(sum(tmp))+'\n')
 				#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
 				if tmp:
-					n_sl += tmp
 					for j in tmp:
-						o_bl[j.denominator] = True
+						if o_bl[j.denominator]:
+							n_sl += [o_sl[i]]
+							escape_fb = True
+							break
+					if not escape_fb:
+						n_sl += tmp
+						for j in tmp:
+							o_bl[j.denominator] = True
 				else:
 					n_sl += [o_sl[i]]
 			print(n_sl, sum(n_sl), len(n_sl), "fb",'\n')
@@ -89,6 +100,8 @@ def main():
 				sys.stderr.write("non sum one fb\n")
 				end = True
 				break
+		if end:
+			break
 
 		while True:
 			sys.stderr.write("three break\n")
@@ -112,7 +125,7 @@ def main():
 				end = True
 				sys.stderr.write("duplicates tb\n")
 				break
-			o_bl = reset_bl(o_sl)
+			o_bl = reset_bl(n_sl)
 			if sum(n_sl) != 1:
 				end = True
 				sys.stderr.write("no sum one tb\n")
@@ -228,8 +241,9 @@ def three_break(n, bl):
 	fl = factors(n)
 	three_facts = get_three_not_used(fl, bl)
 	if three_facts and (three_facts[0] != three_facts[1] != three_facts[2]):
-		if three_facts[0] >=1000 and three_facts[1] >= 1000 and three_facts[2] >= 1000:
-			return [f(1, (n//three_facts[0])*(sum(three_facts))), f(1, (n//three_facts[1])*(sum(three_facts))), f(1, (n//three_facts[0])*(sum(three_facts)))]
+		if (n//three_facts[0])*(sum(three_facts)) <= 1000 and (n//three_facts[1])*(sum(three_facts)) <= 1000 and (n//three_facts[2])*(sum(three_facts)) <= 1000:
+			if not bl[(n//three_facts[0])*(sum(three_facts))] and not bl[(n//three_facts[1])*(sum(three_facts))] and not bl[(n//three_facts[2])*(sum(three_facts))]: 
+				return [f(1, (n//three_facts[0])*(sum(three_facts))), f(1, (n//three_facts[1])*(sum(three_facts))), f(1, (n//three_facts[2])*(sum(three_facts)))]
 	return []
 def get_three_not_used(fl, bl):
 	out_lst = []
