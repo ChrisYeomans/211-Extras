@@ -2,16 +2,8 @@
 from fractions import Fraction as f
 import sys, math
 
-'''Current problem is that the o_bl
-list is getting full up and the reset_bl()
-function does not seem to be doing its job
-properly and at termination the number
-of True values in o_bl is 992 which is
-much larger than the list size.
-'''
-
 def main():
-	o_sl = [f(1, 2), f(1, 3), f(1, 6)]
+	o_sl = [f(1, 4), f(1, 3), f(1, 6), f(1, 10), f(1, 8), f(1, 40)]
 	o_bl = reset_bl(o_sl)
 	n_sl = []
 	end = False
@@ -31,6 +23,11 @@ def main():
 					else:
 						n_sl = n_sl + [o_sl[i]]
 				print(n_sl, sum(n_sl), len(n_sl), "pb",'\n')
+				o_bl = reset_bl(n_sl)
+				tmp_num = num_true(o_bl)
+				sys.stderr.write("num true: "+str(tmp_num)+'\n')
+				sys.stderr.write("len n_sl: "+str(len(n_sl))+'\n')
+				sys.stderr.write(str(tmp_num == len(n_sl))+'\n')
 				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
 				if o_sl == n_sl:
 					break
@@ -39,7 +36,6 @@ def main():
 					end = True
 					break
 				o_sl = n_sl[:]
-				o_bl = reset_bl(n_sl)
 				if sum(n_sl) != 1:
 					sys.stderr.write("non sum one pb\n")
 					end = True
@@ -60,6 +56,11 @@ def main():
 					else:
 						n_sl = n_sl + [o_sl[i]]
 				print(n_sl, sum(n_sl), len(n_sl), "bl",'\n')
+				o_bl = reset_bl(n_sl)
+				tmp_num = num_true(o_bl)
+				sys.stderr.write("num true: "+str(tmp_num)+'\n')
+				sys.stderr.write("len n_sl: "+str(len(n_sl))+'\n')
+				sys.stderr.write(str(tmp_num == len(n_sl))+'\n')
 				if o_sl == n_sl:
 					break
 				o_sl = n_sl[:]
@@ -67,7 +68,6 @@ def main():
 					sys.stderr.write("duplicates bl\n")
 					end = True
 					break
-				o_bl = reset_bl(n_sl)
 				if sum(n_sl) != 1:
 					sys.stderr.write("no sum one bl\n")
 					end = True
@@ -96,6 +96,11 @@ def main():
 					else:
 						n_sl += [o_sl[i]]
 				print(n_sl, sum(n_sl), len(n_sl), "fb",'\n')
+				o_bl = reset_bl(n_sl)
+				tmp_num = num_true(o_bl)
+				sys.stderr.write("num true: "+str(tmp_num)+'\n')
+				sys.stderr.write("len n_sl: "+str(len(n_sl))+'\n')
+				sys.stderr.write(str(tmp_num == len(n_sl))+'\n')
 				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
 				if len(set(n_sl)) != len(n_sl):
 					sys.stderr.write("duplicates fb\n")
@@ -104,7 +109,6 @@ def main():
 				if o_sl == n_sl:
 					break
 				o_sl = n_sl[:]
-				o_bl = reset_bl(n_sl)
 				if sum(n_sl) != 1:
 					sys.stderr.write("non sum one fb\n")
 					end = True
@@ -126,15 +130,18 @@ def main():
 					else:
 						n_sl = n_sl + [o_sl[i]]
 				print(n_sl, sum(n_sl), len(n_sl), "tb",'\n')
+				o_bl = reset_bl(n_sl)
+				tmp_num = num_true(o_bl)
+				sys.stderr.write("num true: "+str(tmp_num)+'\n')
+				sys.stderr.write("len n_sl: "+str(len(n_sl))+'\n')
+				sys.stderr.write(str(tmp_num == len(n_sl))+'\n')
 				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
 				if o_sl == n_sl:
-					f_sl = o_sl[:]
 					break
 				if len(set(o_sl)) != len(o_sl):
 					end = True
 					sys.stderr.write("duplicates tb\n")
 					break
-				o_bl = reset_bl(n_sl)
 				if sum(n_sl) != 1:
 					end = True
 					sys.stderr.write("no sum one tb\n")
@@ -147,10 +154,8 @@ def main():
 	except KeyboardInterrupt:
 		tmp_sum = 0
 		sys.stderr.write(str(o_bl)+'\n')
-		for i in o_bl:
-			if i:
-				tmp_sum+=1
-		sys.stderr.write(str(tmp_sum)+'\n')
+		sys.stderr.write(str(num_true(o_bl))+'\n')
+
 def break_lower(fr, bl):
 	tot = 0
 	out_lst = []
@@ -158,11 +163,11 @@ def break_lower(fr, bl):
 		#sys.stderr.buffer.write(bytes(str(i)+" "+str(tot)+'\n', 'utf-8'))
 		if not bl[i]:
 			#sys.stderr.buffer.write(bytes(str(tot+f(1,i)), 'utf-8'))
-			if tot+f(1,i) == fr:
-				return out_lst + [f(1,i)]
-			elif tot+f(1,i) < fr:
+			if tot+f(1, i) == fr:
+				return out_lst + [f(1, i)]
+			elif tot+f(1, i) < fr:
 				bl[i] = True
-				tot+=f(1,i)
+				tot+=f(1, i)
 				out_lst.append(f(1,i))
 	return []
 
@@ -268,6 +273,13 @@ def get_three_not_used(fl, bl):
 			if len(out_lst) == 3:
 				return out_lst
 	return []
+
+def num_true(bl):
+	tot = 0
+	for i in bl:
+		if i:
+			tot+=1
+	return tot
 
 def punch_fill(a, b, sl, bl):
 	x = sl[a]
