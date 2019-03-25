@@ -2,140 +2,155 @@
 from fractions import Fraction as f
 import sys, math
 
+'''Current problem is that the o_bl
+list is getting full up and the reset_bl()
+function does not seem to be doing its job
+properly and at termination the number
+of True values in o_bl is 992 which is
+much larger than the list size.
+'''
+
 def main():
-	o_sl = [f(1, 1)]
+	o_sl = [f(1, 2), f(1, 3), f(1, 6)]
 	o_bl = reset_bl(o_sl)
 	n_sl = []
 	end = False
 	s_sl = o_sl[:]
-	while True:
+	try:
 		while True:
-			sys.stderr.write("prime break\n")
-			n_sl = []
-			for i in range(len(o_sl)):
-				tmp = prime_break(o_sl[i].denominator, o_bl)
-				#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
-				if tmp:
-					n_sl += tmp
-					for j in tmp:
-						o_bl[j.denominator] = True
-				else:
-					n_sl = n_sl + [o_sl[i]]
-			print(n_sl, sum(n_sl), len(n_sl), "pb",'\n')
-			#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
-			if o_sl == n_sl:
-				break
-			if len(set(n_sl)) != len(n_sl):
-				sys.stderr.write("duplicates pb\n")
-				end = True
-				break
-			o_sl = n_sl[:]
-			o_bl = reset_bl(n_sl)
-			if sum(n_sl) != 1:
-				sys.stderr.write("non sum one pb\n")
-				end = True
-				break
-		if end:
-			break
-
-		while True:
-			sys.stderr.write("break lower\n")
-			n_sl = []
-			for i in range(len(o_sl)):
-				tmp = break_lower(o_sl[i], o_bl)
-				#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
-				if tmp:
-					n_sl += tmp
-					for j in tmp:
-						o_bl[j.denominator] = True
-				else:
-					n_sl = n_sl + [o_sl[i]]
-			print(n_sl, sum(n_sl), len(n_sl), "bl",'\n')
-			if o_sl == n_sl:
-				break
-			o_sl = n_sl[:]
-			if len(set(n_sl)) != len(n_sl):
-				sys.stderr.write("duplicates bl\n")
-				end = True
-				break
-			o_bl = reset_bl(n_sl)
-			if sum(n_sl) != 1:
-				sys.stderr.write("no sum one bl\n")
-				end = True
-				break
-		if end:
-			break
-		
-		while True:
-			sys.stderr.write("factor break\n")
-			n_sl = []
-			for i in range(len(o_sl)):
-				escape_fb = False
-				tmp = f_break(o_sl[i].denominator, o_bl)
-				#sys.stderr.write(str(tmp)+" "+str(sum(tmp))+'\n')
-				#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
-				if tmp:
-					for j in tmp:
-						if o_bl[j.denominator]:
-							n_sl += [o_sl[i]]
-							escape_fb = True
-							break
-					if not escape_fb:
+			while True:
+				sys.stderr.write("prime break\n")
+				n_sl = []
+				for i in range(len(o_sl)):
+					tmp = prime_break(o_sl[i].denominator, o_bl)
+					#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
+					if tmp:
 						n_sl += tmp
 						for j in tmp:
 							o_bl[j.denominator] = True
-				else:
-					n_sl += [o_sl[i]]
-			print(n_sl, sum(n_sl), len(n_sl), "fb",'\n')
-			#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
-			if len(set(n_sl)) != len(n_sl):
-				sys.stderr.write("duplicates fb\n")
-				end = True
+					else:
+						n_sl = n_sl + [o_sl[i]]
+				print(n_sl, sum(n_sl), len(n_sl), "pb",'\n')
+				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
+				if o_sl == n_sl:
+					break
+				if len(set(n_sl)) != len(n_sl):
+					sys.stderr.write("duplicates pb\n")
+					end = True
+					break
+				o_sl = n_sl[:]
+				o_bl = reset_bl(n_sl)
+				if sum(n_sl) != 1:
+					sys.stderr.write("non sum one pb\n")
+					end = True
+					break
+			if end:
 				break
-			if o_sl == n_sl:
-				break
-			o_sl = n_sl[:]
-			o_bl = reset_bl(o_sl)
-			if sum(n_sl) != 1:
-				sys.stderr.write("non sum one fb\n")
-				end = True
-				break
-		if end:
-			break
 
-		while True:
-			sys.stderr.write("three break\n")
-			n_sl = []
-			for i in range(len(o_sl)):
-				tmp = three_break(o_sl[i].denominator, o_bl)
-				#sys.stderr.write(str(tmp)+" "+str(sum(tmp))+'\n')
-				#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
-				if tmp:
-					n_sl += tmp
-					for j in tmp:
-						o_bl[j.denominator] = True
-				else:
-					n_sl = n_sl + [o_sl[i]]
-			print(n_sl, sum(n_sl), len(n_sl), "tb",'\n')
-			#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
-			if o_sl == n_sl:
-				f_sl = o_sl[:]
+			while True:
+				sys.stderr.write("break lower\n")
+				n_sl = []
+				for i in range(len(o_sl)):
+					tmp = break_lower(o_sl[i], o_bl)
+					#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
+					if tmp:
+						n_sl += tmp
+						for j in tmp:
+							o_bl[j.denominator] = True
+					else:
+						n_sl = n_sl + [o_sl[i]]
+				print(n_sl, sum(n_sl), len(n_sl), "bl",'\n')
+				if o_sl == n_sl:
+					break
+				o_sl = n_sl[:]
+				if len(set(n_sl)) != len(n_sl):
+					sys.stderr.write("duplicates bl\n")
+					end = True
+					break
+				o_bl = reset_bl(n_sl)
+				if sum(n_sl) != 1:
+					sys.stderr.write("no sum one bl\n")
+					end = True
+					break
+			if end:
 				break
-			if len(set(o_sl)) != len(o_sl):
-				end = True
-				sys.stderr.write("duplicates tb\n")
+			
+			while True:
+				sys.stderr.write("factor break\n")
+				n_sl = []
+				for i in range(len(o_sl)):
+					escape_fb = False
+					tmp = f_break(o_sl[i].denominator, o_bl)
+					#sys.stderr.write(str(tmp)+" "+str(sum(tmp))+'\n')
+					#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
+					if tmp:
+						for j in tmp:
+							if o_bl[j.denominator]:
+								n_sl += [o_sl[i]]
+								escape_fb = True
+								break
+						if not escape_fb:
+							n_sl += tmp
+							for j in tmp:
+								o_bl[j.denominator] = True
+					else:
+						n_sl += [o_sl[i]]
+				print(n_sl, sum(n_sl), len(n_sl), "fb",'\n')
+				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
+				if len(set(n_sl)) != len(n_sl):
+					sys.stderr.write("duplicates fb\n")
+					end = True
+					break
+				if o_sl == n_sl:
+					break
+				o_sl = n_sl[:]
+				o_bl = reset_bl(n_sl)
+				if sum(n_sl) != 1:
+					sys.stderr.write("non sum one fb\n")
+					end = True
+					break
+			if end:
 				break
-			o_bl = reset_bl(n_sl)
-			if sum(n_sl) != 1:
-				end = True
-				sys.stderr.write("no sum one tb\n")
-				break
-			o_sl = n_sl[:]
-		if sum(n_sl) != 1:
-			break
-		if end:
-			break
 
+			while True:
+				sys.stderr.write("three break\n")
+				n_sl = []
+				for i in range(len(o_sl)):
+					tmp = three_break(o_sl[i].denominator, o_bl)
+					#sys.stderr.write(str(tmp)+" "+str(sum(tmp))+'\n')
+					#sys.stderr.buffer.write(bytes(str(tmp)+'\n', 'utf-8'))
+					if tmp:
+						n_sl += tmp
+						for j in tmp:
+							o_bl[j.denominator] = True
+					else:
+						n_sl = n_sl + [o_sl[i]]
+				print(n_sl, sum(n_sl), len(n_sl), "tb",'\n')
+				#sys.stderr.buffer.write(bytes('\n'+"stand out text "+str(len(o_sl))+'\n\n', 'utf-8'))
+				if o_sl == n_sl:
+					f_sl = o_sl[:]
+					break
+				if len(set(o_sl)) != len(o_sl):
+					end = True
+					sys.stderr.write("duplicates tb\n")
+					break
+				o_bl = reset_bl(n_sl)
+				if sum(n_sl) != 1:
+					end = True
+					sys.stderr.write("no sum one tb\n")
+					break
+				o_sl = n_sl[:]
+			if sum(n_sl) != 1:
+				break
+			if end:
+				break
+	except KeyboardInterrupt:
+		tmp_sum = 0
+		sys.stderr.write(str(o_bl)+'\n')
+		for i in o_bl:
+			if i:
+				tmp_sum+=1
+		sys.stderr.write(str(tmp_sum)+'\n')
 def break_lower(fr, bl):
 	tot = 0
 	out_lst = []
@@ -273,10 +288,10 @@ def punch_fill(a, b, sl, bl):
 	return []
 
 def reset_bl(fl):
-	out = [False]*1001
+	out = [False]*1000
 	for i in fl:
 		out[i.denominator] = True
-	return out
+	return out[:]
 
 if __name__ == "__main__":
 	main()
